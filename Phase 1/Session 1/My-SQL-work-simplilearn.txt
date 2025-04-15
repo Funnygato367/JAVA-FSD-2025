@@ -1,0 +1,1452 @@
+Microsoft Windows [Version 10.0.26100.3476]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Windows\System32>net stop mysql
+The service name is invalid.
+
+More help is available by typing NET HELPMSG 2185.
+
+
+C:\Windows\System32>net stop mysql80
+The MySQL80 service is stopping.
+The MySQL80 service was stopped successfully.
+
+
+C:\Windows\System32>net start mysql80
+The MySQL80 service is starting..
+The MySQL80 service was started successfully.
+
+
+C:\Windows\System32>mysql -u root -p
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.41 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> drop database mydb;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| estore             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.01 sec)
+
+mysql> drop database estore;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> create database estore;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use estore;
+Database changed
+mysql> show tables;
+Empty set (0.04 sec)
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table Product(
+    -> pid int,
+    -> name varchar(256),
+    -> brand varchar(256),
+    -> price int,
+    -> color varchar(256),
+    -> ratings float
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> create table User(
+    ->     uid int,
+    ->     name varchar(256),
+    ->     phone varchar(16),
+    ->     email varchar(256)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
+| user             |
++------------------+
+2 rows in set (0.01 sec)
+
+mysql> create table Customer(
+    ->     cid int,
+    ->     name varchar(256),
+    ->     phone varchar(16),
+    ->     email varchar(256)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| customer         |
+| product          |
+| user             |
++------------------+
+3 rows in set (0.00 sec)
+
+mysql> truncate table customer;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> drop table customer;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
+| user             |
++------------------+
+2 rows in set (0.00 sec)
+
+mysql> Alter table Uer Add age int;
+ERROR 1146 (42S02): Table 'estore.uer' doesn't exist
+mysql> Alter table User Add age int;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> Alter table User drop column age;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
+| user             |
++------------------+
+2 rows in set (0.01 sec)
+
+mysql> describe User;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| uid   | int          | YES  |     | NULL    |       |
+| name  | varchar(256) | YES  |     | NULL    |       |
+| phone | varchar(16)  | YES  |     | NULL    |       |
+| email | varchar(256) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.03 sec)
+
+mysql> SHOW CREATE TABLE users;
+ERROR 1146 (42S02): Table 'estore.users' doesn't exist
+mysql> SHOW CREATE TABLE user;
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                   |
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| user  | CREATE TABLE `user` (
+  `uid` int DEFAULT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.10 sec)
+
+mysql> ALTER TABLE user
+    -> MODIFY uid INT NOT NULL AUTO_INCREMENT,
+    -> ADD PRIMARY KEY (uid);
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SHOW CREATE TABLE user;
++-------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                     |
++-------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| user  | CREATE TABLE `user` (
+  `uid` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> ALTER TABLE user
+    -> CHANGE uid uid INT NOT NULL AUTO_INCREMENT,
+    -> ADD PRIMARY KEY (uid);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> DESCRIBE user;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| uid   | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(256) | YES  |     | NULL    |                |
+| phone | varchar(16)  | YES  |     | NULL    |                |
+| email | varchar(256) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+4 rows in set (0.06 sec)
+
+mysql>
+
+
+MySQL select: It is used for selecting data from a database.
+The returned data is stored in a result table.
+
+Syntax: 
+
+SELECT column1, column2,
+...
+FROM name_of_table;
+
+MySQL where clause:
+
+This isused to filter out the results.
+It allows you to specify selection criteria to select the required records.
+
+Syntax: 
+
+SELECT field1, field2,...fieldN name_of_table1,
+name_of_table2...
+[WHERE condition1 [AND [OR]] condition2.....
+
+
+MySQL AND/OR operator:
+
+This is used to merge two or more Boolean expressions.
+Returns 1,0, Null values
+
+Syntax:
+A AND B
+        TRUE   FALSE   NULL
+TRUE    TRUE   FALSE   NULL
+FALSE   FALSE  FALSE   FALSE
+NULL    NULL   FALSE   NULL
+
+This is used to merge two Boolean expressions
+
+Syntax:
+
+A or B
+
+        TRUE    FALSE  NULL
+TRUE    TRUE    TRUE   TRUE
+FALSE   TRUE    FALSE  NULL
+NULL    TRUE    NULL   NULL 
+
+MySQL Order by Keyword:
+
+It is used to sort the outcome in ascending or descending order.
+
+Syntax:
+
+SELECT column1, column2, ...
+FROM name_of_table
+ORDER BY column1, column2, ...
+ASC|DESC;
+
+MySQL group by:
+
+Used for collecting data from multiple records and grouping the output.
+Select: sum, count, max, min
+
+Syntax:
+
+SELECT expression_a, expression_b, ...
+expression_n,
+aggregate_function (expression)
+FROM tables
+[WHERE conditions]
+GROUP BY expression_a, expression_b, ...
+expression_n;
+
+MySQL Having:
+
+Used by the GROUP clause. It returns the rows where the condition is TRUE.
+
+Syntax:
+
+SELECT expression_a, expression_b, ...
+expression_n,
+aggregate_function (expression)
+FROM tables
+[WHERE conditions]
+GROUP BY expression_a, expression_b, ...
+expression_n;
+HAVING condition;
+
+
+MySQL keys:
+
+MySQL ensures that the values in each column are unique.
+Syntax to create a unique key in table is:
+
+CREATE TABLE table_name(
+    col1 data_type,
+    col2 data_type UNIQUE,
+    ...
+);
+
+The syntax to insert multiple unique key into a table is:
+
+CREATE TABLE table_name(
+  col1 column_definition,
+  col2 column_definition,
+  ...
+  [CONSTRAINT constraint_name]
+  UNIQUE(col_name(s))
+);
+
+If a unique constraint is not specified, SQL gives a name for that column.
+
+
+Composite key: 
+
+- A composite key permits you to distinguish every row of the table interestingly.
+
+- It is framed by more than one column.
+
+- MySQL ensure the uniqueness of the columns when the columns are   
+  consolidated.
+- This key recognizes with more than one property extraordinarily
+- A segment of a composite key can have various information types.
+
+Primary Key: 
+
+It helps to uniquely recognize each record in a table. Unique and not NULL.
+
+Syntax:
+
+CREATE TABLE Persons (
+ID int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Age int,
+    CONSTRAINT PK_Person PRIMARY KEY
+(ID,LastName)
+);
+
+Foreign Key: It is used to prevent actions that would impact connections between tables.
+Foreign Key -> Child table
+Parent Key -> Referenced or Parent table
+
+
+Foreign Key: The syntax to create a Foreign Key on the "ProductId" column when the "Orders" table is created is:
+
+CREATE TABLE Orders (
+OrderID int NOT NULL,
+OrderNumber int NOT NULL,
+ProductID int,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (ProductId) REFERENCES
+Persons(ProductId)
+);
+
+MySQL Distinct Keyword:
+
+The SELECT DISTINCT statement is used to return different values.
+
+Syntax:
+
+SELECT DISTINCT column1, column2, ...
+FROM name_of_table;
+
+The MySQL insert statement is used to insert single or multiple records into a table.
+
+Syntax:
+
+INSERT INTO table
+(column1, column2, ...)
+VALUES
+(expression1, expression2, ... ),
+(expression1, expression2, ... ),
+...;
+
+The LAST_INSERT_ID() function returns the AUTO_INCREMENT ID of the last row that is added or updated in a table.
+
+Syntax:
+
+LAST_INSERT_ID(expression)
+
+MySQL Insert multiple records command:
+This is used to insert multiple rows into a table.
+
+Syntax:
+
+LAST_INSERT_ID(ex_INSERT INTO name_of_table
+(column_list)
+VALUES
+(value_list_1);
+(value_list_2);
+...
+(value_list_n);
+pression)
+
+
+Join:
+
+A join statement is used to merge the rows from two or more tables.
+Different types of JOINS are:
+
+(INNER)JOIN, LEFT(OUTER)JOIN, RIGHT(OUTER)JOIN, FULL(OUTER)JOIN, SELF JOIN
+
+Inner join:
+
+It returns records that have the same values in both the tables.
+The keyword takes the records with matching values in both the tables.
+
+Syntax:
+
+SELECT column_name_(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name =
+table2.column_name;
+
+
+Left join:
+It returns the same records from the right table and all records from the left table.
+
+It shows 0 records from the right side if no match is found.
+
+Syntax:
+
+SELECT column_name_(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name =
+table2.column_name;
+
+Right join:
+
+It returns the same records from the left table and all records from the right side.
+
+It shows 0 records from the left side if no match is found.
+
+Syntax:
+
+SELECT column_name_(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name =
+table2.column_name;
+
+Full join:
+
+It returns all records when the value is the same, either on the right or left side.
+
+Syntax:
+
+SELECT column_name_(s)
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column_name = table2.column_name
+WHERE condition;
+
+Self join:
+
+It is a regular join where the table is joined with itself.
+
+Syntax:
+
+SELECT column_name_(s)
+FROM table1 T1, table1 T2
+WHERE condition;
+
+UPDATE keyword:
+
+It is used to update the current records from a table.
+It helps to modify the values of one or multiple columns or rows.
+
+Syntax is: 
+
+UPDATE [LOW_PRIORITY] [IGNORE] table_name
+SET 
+  column_name1 = expr1,
+  column_name2 = expr2,
+  ...
+[WHERE condition];
+
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.41 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> describe User;
+ERROR 1046 (3D000): No database selected
+mysql> use estore;
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
+| user             |
++------------------+
+2 rows in set (0.05 sec)
+
+mysql> describe User;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| uid   | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(256) | YES  |     | NULL    |                |
+| phone | varchar(16)  | YES  |     | NULL    |                |
+| email | varchar(256) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from User;
+Empty set (0.03 sec)
+
+mysql> insert into User
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    -> mysql
+    ->
+    -> sql
+    ->
+    ->
+    ->
+    -> mysql
+    -> ^C
+mysql> insert into User(uid, name, phone, email) values (null, 'john', '+91 9999911111', 'john@example.com');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from User;
++-----+------+----------------+------------------+
+| uid | name | phone          | email            |
++-----+------+----------------+------------------+
+|   1 | john | +91 9999911111 | john@example.com |
++-----+------+----------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into User values (null, 'fiona', '+91 9999922222', 'fionna@example.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
++-----+-------+----------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into User(uid, name, email) values (null, 'john', 'john@example.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
+|   3 | john  | NULL           | john@example.com   |
++-----+-------+----------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> update User set name = 'mike', phone='+91 9090910101', email = 'mike@example.com' where uid = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
+|   3 | mike  | +91 9090910101 | mike@example.com   |
++-----+-------+----------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql>
+
+
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.41 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> describe User;
+ERROR 1046 (3D000): No database selected
+mysql> use estore;
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_estore |
++------------------+
+| product          |
+| user             |
++------------------+
+2 rows in set (0.05 sec)
+
+mysql> describe User;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| uid   | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(256) | YES  |     | NULL    |                |
+| phone | varchar(16)  | YES  |     | NULL    |                |
+| email | varchar(256) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from User;
+Empty set (0.03 sec)
+
+mysql> insert into User
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    ->
+    -> mysql
+    ->
+    -> sql
+    ->
+    ->
+    ->
+    -> mysql
+    -> ^C
+mysql> insert into User(uid, name, phone, email) values (null, 'john', '+91 9999911111', 'john@example.com');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from User;
++-----+------+----------------+------------------+
+| uid | name | phone          | email            |
++-----+------+----------------+------------------+
+|   1 | john | +91 9999911111 | john@example.com |
++-----+------+----------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into User values (null, 'fiona', '+91 9999922222', 'fionna@example.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
++-----+-------+----------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into User(uid, name, email) values (null, 'john', 'john@example.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
+|   3 | john  | NULL           | john@example.com   |
++-----+-------+----------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> update User set name = 'mike', phone='+91 9090910101', email = 'mike@example.com' where uid = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+
+| uid | name  | phone          | email              |
++-----+-------+----------------+--------------------+
+|   1 | john  | +91 9999911111 | john@example.com   |
+|   2 | fiona | +91 9999922222 | fionna@example.com |
+|   3 | mike  | +91 9090910101 | mike@example.com   |
++-----+-------+----------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> delete User;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> alter table User add age int default 26
+    -> ;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe User;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| uid   | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(256) | YES  |     | NULL    |                |
+| phone | varchar(16)  | YES  |     | NULL    |                |
+| email | varchar(256) | YES  |     | NULL    |                |
+| age   | int          | YES  |     | 26      |                |
++-------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+------+
+| uid | name  | phone          | email              | age  |
++-----+-------+----------------+--------------------+------+
+|   1 | john  | +91 9999911111 | john@example.com   |   26 |
+|   2 | fiona | +91 9999922222 | fionna@example.com |   26 |
+|   3 | mike  | +91 9090910101 | mike@example.com   |   26 |
++-----+-------+----------------+--------------------+------+
+3 rows in set (0.00 sec)
+
+mysql> select name, phone from User;
++-------+----------------+
+| name  | phone          |
++-------+----------------+
+| john  | +91 9999911111 |
+| fiona | +91 9999922222 |
+| mike  | +91 9090910101 |
++-------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> ALTER TABLE User ADD COLUMN city VARCHAR(256);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE User SET city = 'Bangalore';
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from User;
++-----+-------+----------------+--------------------+------+-----------+
+| uid | name  | phone          | email              | age  | city      |
++-----+-------+----------------+--------------------+------+-----------+
+|   1 | john  | +91 9999911111 | john@example.com   |   26 | Bangalore |
+|   2 | fiona | +91 9999922222 | fionna@example.com |   26 | Bangalore |
+|   3 | mike  | +91 9090910101 | mike@example.com   |   26 | Bangalore |
++-----+-------+----------------+--------------------+------+-----------+
+3 rows in set (0.00 sec)
+
+mysql>
+
+MYSQL Queries
+
+1. get the list of all databases
+   > show databases
+
+2. Create Database
+   > create database <name_of_your_database>
+
+3. use the newly created database
+
+   > use <name_of_your database>;
+
+4. create Table in Database
+   > create Table <name_of_table>(id bigint primary key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+
+5. create Table in Database
+   > create table eproduct(id bigint primary key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+
+6. get all the tables in the database
+   > show tables;
+
+7. get the description of the table
+   > describe table_name;
+eg: describe eproduct;
+
+8. Insert record in Database;
+   insert into eproduct (name,price) value("Apple","80000");
+   insert into eproduct (name,price) value("Lenovo","120000");
+   insert into eproduct (name,price) value("Acer Laptop","75000");
+   insert into eproduct (name,price) value("VIO Laptop","69000");
+   insert into eproduct (name,price) value("Samsung","34000");
+
+    
+9. retrieve all products
+    > select * from eproduct;
+
+10. retrieve the product by some filer
+    > select * from eproduct where id=2;
+    > select * from eproduct where name="Apple";
+11. Update Record
+    > update eproduct set name="Apple Mac Book Air" where id=1;
+    > update eproduct set name="Samsung Galaxy Ultra" where id=5;
+
+12. Delete Entries in the table
+    > delete from eproduct where id=5;
+    > delete from eproduct where name="Vivo Laptop";
+
+13. Delete Entire Table
+    > drop table eproduct;
+
+14. Insert multiple records;
+    > insert into eproduct(name,price) value("Apple Inc",180000),("Android", 100000),("Linux",150000);
+
+15. filter by query
+     > SELECT * FROM products ORDER BY date_added ASC;
+     > SELECT * FROM products ORDER BY date_added DESC;
+     > SELECT * FROM products ORDER BY id ASC;
+     > SELECT * FROM products ORDER BY id DESC;
+***************************************************************************
+CRATE ANOTHER TABLE
+***************************************************************************
+Create the table with name say Student
+
+> create table students(id bigint primary key auto_increment, name varchar(100), age int, grade decimal(10,2),major varchar(50));
+
+let's insert records in the table
+> insert into students(name,age,grade,major) values('Alice',20,3.5,'Physics'),('Bob',22,3.7,'Chemistry'),('Charlie',22,3.5, 'Mathematics'),('Diana',20,3.8,'Mathematics');
+
+filer using ORDER BY
+> select * from students ORDER BY grade DESC;
+> select * from students ORDER BY grade ASC;
+
+16. DISTINCT Query
+         > SELECT DISTINCT major from students;
+    use of COUNT in MYSQL(It will Return the no.of entries in the Table )
+         > select major, COUNT(*) from students GROUP BY major.
+
+17. TCL commands (Transaction control commands) are used to manage database transaction and ensures data integrity, these commands allows you to commit, rollback and control transaction point
+
+A. let's understand with the help of below table
+   > create table accounts(id int auto_increment primary key, name varchar(50), balance decimal(10,2);
+
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.41 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| estore             |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopdb             |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.05 sec)
+
+mysql> create database simplilearn_march
+    -> ;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| estore             |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopdb             |
+| simplilearn_march  |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.00 sec)
+
+mysql> use simplilearn_march
+Database changed
+mysql> create table eproduct(id bigint primery key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primery key auto_increment,name varchar(100),price decimal(10,2),date_added time' at line 1
+mysql> create table eproduct(id bigint primary key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> get all the tables in the database
+    -> show tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'all the tables in the database
+show tables' at line 1
+mysql> create Table in database
+    -> create table eproduct(id bigint primary key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in database
+create table eproduct(id bigint primary key auto_increment,name varc' at line 1
+mysql> get all the tables in the database
+    -> show tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'all the tables in the database
+show tables' at line 1
+mysql> get the description of the table
+    -> describe
+    -> ^C
+mysql> SHOW TABLES;
++-----------------------------+
+| Tables_in_simplilearn_march |
++-----------------------------+
+| eproduct                    |
++-----------------------------+
+1 row in set (0.01 sec)
+
+mysql> CREATE TABLE eproduct (
+    ->     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    ->     name VARCHAR(100),
+    ->     price DECIMAL(10,2),
+    ->     date_added TIMESTAMP DEFAULT NOW()
+    -> );
+ERROR 1050 (42S01): Table 'eproduct' already exists
+mysql> DESC eproduct;
++------------+---------------+------+-----+-------------------+-------------------+
+| Field      | Type          | Null | Key | Default           | Extra             |
++------------+---------------+------+-----+-------------------+-------------------+
+| id         | bigint        | NO   | PRI | NULL              | auto_increment    |
+| name       | varchar(100)  | YES  |     | NULL              |                   |
+| price      | decimal(10,2) | YES  |     | NULL              |                   |
+| date_added | timestamp     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+---------------+------+-----+-------------------+-------------------+
+4 rows in set (0.01 sec)
+
+mysql> Insert record in Database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in Database' at line 1
+mysql> insert record in database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in database' at line 1
+mysql> Insert record in database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in database' at line 1
+mysql> insert into eproduct (name,price) value("Apple","80000");
+Query OK, 1 row affected (0.02 sec)
+
+mysql>    insert into eproduct (name,price) value("Lenovo","120000");
+Query OK, 1 row affected (0.00 sec)
+
+mysql>    insert into eproduct (name,price) value("Acer Laptop","75000");
+Query OK, 1 row affected (0.00 sec)
+
+mysql>    insert into eproduct (name,price) value("VIO Laptop","69000");
+Query OK, 1 row affected (0.00 sec)
+
+mysql>    insert into eproduct (name,price) value("Samsung","34000");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from eproduct;
++----+-------------+-----------+---------------------+
+| id | name        | price     | date_added          |
++----+-------------+-----------+---------------------+
+|  1 | Apple       |  80000.00 | 2025-04-04 12:53:50 |
+|  2 | Lenovo      | 120000.00 | 2025-04-04 12:53:50 |
+|  3 | Acer Laptop |  75000.00 | 2025-04-04 12:53:50 |
+|  4 | VIO Laptop  |  69000.00 | 2025-04-04 12:53:50 |
+|  5 | Samsung     |  34000.00 | 2025-04-04 12:53:50 |
++----+-------------+-----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from eproduct where id=2
+    -> ;
++----+--------+-----------+---------------------+
+| id | name   | price     | date_added          |
++----+--------+-----------+---------------------+
+|  2 | Lenovo | 120000.00 | 2025-04-04 12:53:50 |
++----+--------+-----------+---------------------+
+1 row in set (0.00 sec)
+
+
+Enter password: **************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.41 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE TABLE products (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(255) NOT NULL,
+    ->     price DECIMAL(10, 2) NOT NULL,
+    ->     date_added DATETIME NOT NULL
+    -> );
+ERROR 1046 (3D000): No database selected
+mysql>
+mysql> INSERT INTO products (name, price, date_added) VALUES
+    -> ('Apple', 80000.00, '2025-04-04 12:53:50'),
+    -> ('Lenovo', 120000.00, '2025-04-04 12:53:50'),
+    -> ('Acer Laptop', 75000.00, '2025-04-04 12:53:50'),
+    -> ('VIO Laptop', 69000.00, '2025-04-04 12:53:50'),
+    -> ('Samsung', 34000.00, '2025-04-04 12:53:50');
+ERROR 1046 (3D000): No database selected
+mysql> USE your_database_name;
+ERROR 1049 (42000): Unknown database 'your_database_name'
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| estore             |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopdb             |
+| simplilearn_march  |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.04 sec)
+
+mysql> USE estore;
+Database changed
+mysql> CREATE TABLE products (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(255) NOT NULL,
+    ->     price DECIMAL(10, 2) NOT NULL,
+    ->     date_added DATETIME NOT NULL
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> INSERT INTO products (name, price, date_added) VALUES
+    -> ('Apple', 80000.00, '2025-04-04 12:53:50'),
+    -> ('Lenovo', 120000.00, '2025-04-04 12:53:50'),
+    -> ('Acer Laptop', 75000.00, '2025-04-04 12:53:50'),
+    -> ('VIO Laptop', 69000.00, '2025-04-04 12:53:50'),
+    -> ('Samsung', 34000.00, '2025-04-04 12:53:50');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from eproduct where id=2
+    -> ;
+ERROR 1146 (42S02): Table 'estore.eproduct' doesn't exist
+mysql> select * from eproduct;
+ERROR 1146 (42S02): Table 'estore.eproduct' doesn't exist
+mysql> SELECT * FROM products WHERE id = 2;
++----+--------+-----------+---------------------+
+| id | name   | price     | date_added          |
++----+--------+-----------+---------------------+
+|  2 | Lenovo | 120000.00 | 2025-04-04 12:53:50 |
++----+--------+-----------+---------------------+
+1 row in set (0.01 sec)
+
+mysql> select * from eproduct order by date_added ASC;
+ERROR 1146 (42S02): Table 'estore.eproduct' doesn't exist
+mysql> SELECT * FROM products ORDER BY date_added ASC;
++----+-------------+-----------+---------------------+
+| id | name        | price     | date_added          |
++----+-------------+-----------+---------------------+
+|  1 | Apple       |  80000.00 | 2025-04-04 12:53:50 |
+|  2 | Lenovo      | 120000.00 | 2025-04-04 12:53:50 |
+|  3 | Acer Laptop |  75000.00 | 2025-04-04 12:53:50 |
+|  4 | VIO Laptop  |  69000.00 | 2025-04-04 12:53:50 |
+|  5 | Samsung     |  34000.00 | 2025-04-04 12:53:50 |
++----+-------------+-----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM products ORDER BY date_added DESC;
++----+-------------+-----------+---------------------+
+| id | name        | price     | date_added          |
++----+-------------+-----------+---------------------+
+|  1 | Apple       |  80000.00 | 2025-04-04 12:53:50 |
+|  2 | Lenovo      | 120000.00 | 2025-04-04 12:53:50 |
+|  3 | Acer Laptop |  75000.00 | 2025-04-04 12:53:50 |
+|  4 | VIO Laptop  |  69000.00 | 2025-04-04 12:53:50 |
+|  5 | Samsung     |  34000.00 | 2025-04-04 12:53:50 |
++----+-------------+-----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM products ORDER BY id ASC;
++----+-------------+-----------+---------------------+
+| id | name        | price     | date_added          |
++----+-------------+-----------+---------------------+
+|  1 | Apple       |  80000.00 | 2025-04-04 12:53:50 |
+|  2 | Lenovo      | 120000.00 | 2025-04-04 12:53:50 |
+|  3 | Acer Laptop |  75000.00 | 2025-04-04 12:53:50 |
+|  4 | VIO Laptop  |  69000.00 | 2025-04-04 12:53:50 |
+|  5 | Samsung     |  34000.00 | 2025-04-04 12:53:50 |
++----+-------------+-----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql>
+
+
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git commit -m "My SQL work simplilearn"
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git commit -m "My SQL work simplilearn";
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> echo "# My SQL work simplilearn.txt" >> README.md
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git init
+Initialized empty Git repository in C:/2025/JAVA FSD 2025/Phase 1/Session 1/.git/
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git add README.md
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git commit -m "first commit"
+[main (root-commit) b94e4e8] first commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 README.md
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git branch -M main
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git remote add origin https://github.com/Funnygato367/My-SQL-work-simplilearn.txt.git
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> git push -u origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 271 bytes | 271.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Funnygato367/My-SQL-work-simplilearn.txt.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> mkdir -p "Phase 1/Session 1"
+
+
+    Directory: C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          4/4/2025   4:05 PM                Session 1
+
+
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> cd "Phase 1/Session 1"
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> echo "MySQL work for Simplilearn" > My-SQL-work-simplilearn.txt
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> git init
+Initialized empty Git repository in C:/2025/JAVA FSD 2025/Phase 1/Session 1/Phase 1/Session 1/.git/
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> git add "Phase 1/Session 1/My-SQL-work-simplilearn.txt"
+fatal: pathspec 'Phase 1/Session 1/My-SQL-work-simplilearn.txt' did not match any files
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> git commit -m "Add MySQL work file for Simplilearn in Phase 1/Session 1"
+On branch main
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        My-SQL-work-simplilearn.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> git add "Phase 1/Session 1/My-SQL-work-simplilearn"
+fatal: pathspec 'Phase 1/Session 1/My-SQL-work-simplilearn' did not match any files
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1\Phase 1\Session 1> cd "C:\2025\JAVA FSD 2025"
+PS C:\2025\JAVA FSD 2025> git init
+Reinitialized existing Git repository in C:/2025/JAVA FSD 2025/.git/
+PS C:\2025\JAVA FSD 2025> cd "Phase 1\Session 1"
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> echo Your SQL work here > My-SQL-work-simplilearn
+PS C:\2025\JAVA FSD 2025\Phase 1\Session 1> cd "..\.."
+PS C:\2025\JAVA FSD 2025> git add "Phase 1\Session 1\My-SQL-work-simplilearn"
+PS C:\2025\JAVA FSD 2025> git commit -m "Add My-SQL-work-simplilearn to Phase 1/Session 1"
+[main 13fb174] Add My-SQL-work-simplilearn to Phase 1/Session 1
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 Phase 1/Session 1/My-SQL-work-simplilearn
+PS C:\2025\JAVA FSD 2025> git remote add origin https://github.com/your-username/your-repo-name.git
+error: remote origin already exists.
+PS C:\2025\JAVA FSD 2025> git remote add origin https://github.com/your-username/your-repo-name.git
+error: remote origin already exists.
+PS C:\2025\JAVA FSD 2025> git push -u origin main
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (5/5), 457 bytes | 228.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Funnygato367/JAVA-FSD-2025.git
+   bff2d12..13fb174  main -> main
+branch 'main' set up to track 'origin/main'.
+PS C:\2025\JAVA FSD 2025>
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+SQL NOTES: 
+
+***************************************************************************************************************
+MYSQL Queries
+***************************************************************************************************************
+1. get the list of all databases
+> show databases;
+
+2. Create Database
+> create database <name_of_your_database>;
+> eg: create database simplilearn
+
+3. use the newly created database
+> use <name_of_your_database>; 
+eg: use simplilearn
+
+4. create Table in Database
+> create table eproduct(id bigint primary key auto_increment,name varchar(100),price decimal(10,2),date_added timestamp default now());
+
+5. get all the tables in the database
+> show tables;
+
+6. get the description of the table
+> describe table_name;
+eg: describe eproduct;
+
+7. Insert record in Database;
+	>insert into eproduct (name,price) value("Apple","80000");
+	>insert into eproduct (name,price) value("Lenovo","120000");
+	>insert into eproduct (name,price) value("Acer Laptop","75000");
+	>insert into eproduct (name,price) value("VIO Laptop","69000");
+	>insert into eproduct (name,price) value("Samsung","34000");
+
+8. retrive all products
+	> select * from eproduct;
+
+9. retrive the product by some filer
+	> select * from eproduct where id=2;
+	> select * from eproduct where name="Apple";
+10. Update Record	
+	> update eproduct set name="Apple Mac Book Air" where id=1;
+	> update eproduct set  name="Samsung Galaxy Ultra" where id=5;
+
+
+11. Delete Entries in The Table
+	> delete from eproduct where id=5;
+	> delete from eproduct where name="Vivo Laptop";
+
+12. Delete Entire Table
+	> drop table eproduct;
+
+
+13 Inserting Multiple Records;
+
+	> insert into eproduct(name,price) value("Apple Inc",180000),("Android",100000),("Linux",150000);
+
+14 filter by query
+	> select * from eproduct order by date_added ASC;
+	> select * from eproduct order by date_added DESC;
+	> select * from eproduct order by id ASC;
+	> select * from eproduct order by id DESC;
+
+***************************************************************************************************************
+CREATE ANOTHER TABLE
+***************************************************************************************************************
+Create the table with name say Students
+
+
+	> create table students(id bigint primary key auto_increment,name varchar(100), age int, grade decimal(10,2),major varchar(50));
+
+let's insert records in the table
+	> insert into students(name,age,grade,major) values('Alice',20,3.5,'Physics'),('Bob',22,3.7,'Chemistry'),('Charlie',22,3.2,'Mathematics'),('Diana',22,3.8,'Mathematics');
+
+filer using ORDER BY
+	> select * from students ORDER BY grade DESC;
+	> select * from students ORDER BY grade ASC;
+
+15 DISTINCT Query
+	> SELECT DISTINCT major from students;
+16 use of COUNT in MYSQL(It will Return the no.of  entries in the Table	)
+	> select major, COUNT(*) from students GROUP BY major
+
+17 TCL Commands (TRANSACTIONA CONTROL COMMANDS) are used to manage database transaction and ensures data integrity, these commands allows you to commit , rollback and control transaction point
+
+	A. let's understand with the help of below table
+		> create table accounts(id int auto_increment primary key, name varchar(50), balance decimal(10,2));
+	B. insert records
+		> INSERT INTO accounts (name,balance) values ('Nikunj Soni',1000.00),('Suhas inamdar',500.00);
+
+	C. STRAT TRANSACTION
+		> START TRANSACTION;
+	D. update accounts set balance= balance-200 where name='Nikunj Soni';
+	E. update accounts set balance= balance+200 where name='Suhas inamdar';
+	F. commit;
+	
+	G. Create Save Point for ROllback the Transaction
+		> START TRANSACTION;
+		> SAVEPOINT sp1;
+		> update accounts set balance=balance-50.00 where name='Nikunj Soni';
+		> rollback  to sp1;
+
+18. working with subQueries in Database;
+
+	> create table courses(course_id int auto_increment primary key,course_name varchar(100), instructor varchar(100));
+	> create table students(student_id int auto_increment primary key,name varchar(100),major varchar(100));
+	 
+
+INSERT SOME RECORDS
+	> insert into student(name,major) values('Jhon','Mathematics'),('BOB','Computer Science');
+	> insert into courses(course_name,instructor) values('Database System','Nikunj Soni'),('Calculus','Dr. Jones');
+	
+ Sub Queries
+	> select s.name from student s
+	> select c.course_name from courses c;
+	> select * from students s join courses c on c.course_id=s.student_id;
+
+19.RelationShip in the databse
+	> create table customers(CustomerId int auto_increment primary key, Name varchar(100),Email varchar(100),Phone varchar(15));
+	> create table Orders(OrderId int auto_increment primary key,OrderDate Date,CustomerId int,Amount decimal(10,2), FOREIGN KEY(CustomerId) REFERENCES Customers(CustomerId));
+
+	Insert data:
+	-------------
+	> insert into Customers(Name,Email,Phone) values ('Alice','alice@gmail.com','9876543210'),('Jhon','jhon@gmail.com','9988776655');
+	>insert into Orders(OrderDate,CustomerId,Amount) values('2025-03-29',1,250.00),('2025-03-28',2,350.00);
+
+	RESULT:
+	------------
+	> SELECT <CONDITIONS> FROM table_1 JOIN table_2 ON TABLE1_COL=TABLE2_COL
+	> SELECT Customers.Name,Customers.Email,Orders.OrderId,Orders.OrderDate,Orders.Amount FROM Customers JOIN Orders ON Customers.CustomerId= Orders.CustomerId;
+	> SELECT c.Name,c.Email,o.OrderId,o.OrderDate,o.Amount FROM Customers c JOIN Orders o ON c.CustomerId=o.CustomerId
+
+20. TYPES OF JOIN
+-----------------------------	
+1.INNER JOIN--> MATCHES ONLY EXISTING RELATIONSHIPS(no unmatched rows)
+2.LEFT JOIN-->
+3.RIGHT JOIN-->
+4.FULL ORDER JOIN--> my sql doesnt alow  full join but can be done using UNION
+5.CROSS JOIN--->Generate  all possible combination
+
+
+
+1. INNER JOIN
+-------------------
+	> SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c INNER JOIN Orders o ON c.CustomerId=o.CustomerId;
+
+2. LEFT JOIN
+-------------------
+	>SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c LEFT JOIN Orders o ON c.CustomerId=o.CustomerId;
+
+3. RIGHT JOIN
+-------------------
+	> SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c RIGHT JOIN Orders o ON c.CustomerId=o.CustomerId;
+
+4. FULL OUTER JOIN
+-------------------
+	> SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c LEFT JOIN Orders o ON c.CustomerId=o.CustomerId UNION SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c RIGHT JOIN Orders o ON c.CustomerId=o.CustomerId;
+
+5. CROSS JOIN
+-------------------
+	>SELECT c.CustomerId,c.Name,o.OrderId,o.OrderDate,o.Amount FROM Customers  c CROSS JOIN Orders o;
+
+20. INBUILT- Functions
+----------------------------
+	1. SUM
+		> select sum(Amount) from orders;
+	2. UPPERSS
+		> select UPPER(Name) from customers;
+	3. AS
+		> select OrderDate, YEAR(OrderDate) AS Order_Year from orders;
+	4. LIKE
+		> select * from Customers WHERE Name LIKE 'Nik%'
+			output: NIKE, NIKON,NIKUNJ
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+S E L E C T   *   F R O M   s t u d e n t s ;  
+ S E L E C T   *   F R O M   s t u d e n t s ;  
+ I N S E R T   I N T O   s t u d e n t s   V A L U E S   ( 1 ,   ' J o h n ' ,   ' D o e ' ) ;  
+ D E L E T E   F R O M   s t u d e n t s   W H E R E   i d = 1 ;  
+ 
